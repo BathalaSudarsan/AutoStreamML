@@ -1,9 +1,8 @@
 import os
 import pandas as pd
 import streamlit as st
-from pandas_profiling import ProfileReport
+from ydata_profiling import ProfileReport
 from pycaret.regression import setup, compare_models, pull, save_model
-from streamlit_pandas_profiling import st_profile_report
 
 # Check if dataset exists
 if os.path.exists('dataset.csv'):
@@ -26,8 +25,8 @@ if choice == "Upload":
 if choice == "Profiling":
     st.title("Exploratory Data Analysis")
     if 'df' in locals():
-        profile_df = ProfileReport(df)
-        st_profile_report(profile_df)
+        profile = ProfileReport(df, title='Exploratory Data Analysis Report')
+        st.write(profile.to_html())
     else:
         st.warning("Please upload a dataset first.")
 
@@ -59,10 +58,6 @@ if choice == "Modelling":
     else:
         st.warning("Please upload a dataset first.")
 
-
-
 if choice == "Download":
     with open('best_model.pkl', 'rb') as f:
         st.download_button('Download Model', f, file_name="best_model.pkl")
-
-
